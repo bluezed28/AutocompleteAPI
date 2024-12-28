@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-US"></html>
+<head>
+    <input type="text" class="form-control" id="searchMovie" value="">  
+    <br>  
+    <textarea id="results" name="results" rows="40" cols="50">
+        Search resutls
+        </textarea>
+
+    <script>
+    var searchInput = document.getElementById("searchMovie");
+
+    // get movie
+    searchInput.onkeydown = function() {
+    var searchData = document.getElementById("searchMovie").value;
+
+    if (searchData.length >= 3 ) {
+        var area_output ;
+        var request = new XMLHttpRequest();
+        request.open('GET', 'http://www.omdbapi.com/?s=' + searchData + '&apikey=e31a67cb', true);
+        request.onload = function () {
+            // Begin accessing JSON data here
+            var data = JSON.parse(this.response);
+
+            const wrapper = document.createElement('div');
+            // app.appendChild(wrapper);
+            var results = data;
+            if (request.status >= 200 && request.status < 400) {
+                console.log(data);
+                
+    
+                Object.keys(data.Search).map(function(key, index) {
+                    console.log(data.Search[index].Title);
+
+                    const searchResultsContainer = document.createElement('div');
+                    searchResultsContainer.setAttribute('class', 'row');
+
+                    const h1 = document.createElement('h1');
+                    h1.textContent = data.Search[index].Title;
+                    area_output = area_output + data.Search[index].Title + "\n"
+                    wrapper.appendChild(searchResultsContainer);
+                    searchResultsContainer.appendChild(h1);
+                    console.log(searchResultsContainer);
+                 });
+                 document.getElementById('results').value = area_output
+
+            } else {
+                console.log('error');
+            }
+        };
+        request.send();
+    }
+    
+  };
+  </script>
+
+
+</head>
+
+
